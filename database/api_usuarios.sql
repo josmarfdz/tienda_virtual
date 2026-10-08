@@ -1,7 +1,7 @@
 --
 -- PostgreSQL database dump adaptada para E-Tienda
 -- Base de datos: api_usuarios
---
+-- Creación de la base de datos para AWS
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
