@@ -36,4 +36,3 @@ echo "Abre en tu navegador: http://$(curl -s -m 3 ifconfig.me || hostname -I | a
 echo "=========================================================="
 
 npm run dev
-##
