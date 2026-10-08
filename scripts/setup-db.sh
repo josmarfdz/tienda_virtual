@@ -22,7 +22,7 @@ sudo sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" "$PG_CO
 sudo sed -i "s/listen_addresses = 'localhost'/listen_addresses = '*'/g" "$PG_CONF"
 
 # Permitir conexiones remotas
-if ! grep -q "0.0.0.0/0" "$PG_HBA"; then
+if ! sudo grep -q "0.0.0.0/0" "$PG_HBA"; then
     echo "host    all             all             0.0.0.0/0               md5" | sudo tee -a "$PG_HBA"
 fi
 
@@ -32,10 +32,10 @@ echo "=== [4/4] Ejecutando api_usuarios.sql ==="
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCHEMA_PATH="$SCRIPT_DIR/../database/api_usuarios.sql"
 
-sudo -u postgres psql -d api_usuarios -f "$SCHEMA_PATH"
+cat "$SCHEMA_PATH" | sudo -u postgres psql -d api_usuarios
 
 echo ""
 echo "=========================================================="
-echo "✅ Base de datos configurada con éxito."
-echo "👉 IP Privada de esta máquina: $(hostname -I | awk '{print $1}')"
+echo "Base de datos configurada con éxito."
+echo "IP Privada de esta máquina: $(hostname -I | awk '{print $1}')"
 echo "=========================================================="
