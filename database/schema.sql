@@ -1,5 +1,5 @@
 -- ========================================================
--- Script de inicialización de la Base de Datos PostgreSQL
+-- Script de inicialización de la Base de Datos PostgreSQL para AWS
 -- Proyecto: E-Tienda
 -- ========================================================
 
