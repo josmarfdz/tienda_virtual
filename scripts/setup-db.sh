@@ -39,4 +39,3 @@ echo "=========================================================="
 echo "Base de datos configurada con éxito."
 echo "IP Privada de esta máquina: $(hostname -I | awk '{print $1}')"
 echo "=========================================================="
-##
