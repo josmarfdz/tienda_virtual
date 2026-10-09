@@ -23,17 +23,7 @@ BACKEND_DIR="$SCRIPT_DIR/../backend/user-service"
 cd "$BACKEND_DIR"
 npm install
 
-echo "=== [3/3] Configuración de entorno ==="
-# Los valores SMTP se pueden exportar antes de ejecutar este script.
-# Si se dejan vacíos, la API funcionará pero los correos se omitirán con una advertencia.
-SMTP_HOST_VALUE="${SMTP_HOST:-}"
-SMTP_PORT_VALUE="${SMTP_PORT:-2525}"
-SMTP_USER_VALUE="${SMTP_USER:-}"
-SMTP_PASS_VALUE="${SMTP_PASS:-}"
-EMAIL_FROM_VALUE="${EMAIL_FROM:-$SMTP_USER_VALUE}"
-ADMIN_EMAIL_VALUE="${ADMIN_EMAIL:-}"
-PAYMENT_INSTRUCTIONS_VALUE="${PAYMENT_INSTRUCTIONS:-Transferencia de prueba: solicita al administrador los datos de pago de E-Tienda. No realices pagos reales en este entorno académico.}"
-
+echo "=== [3/3] Generando archivo .env ==="
 cat <<EOF > .env
 DB_HOST=$DB_HOST
 DB_USER=tienda_user
@@ -42,17 +32,7 @@ DB_NAME=api_usuarios
 DB_PORT=5432
 JWT_SECRET=super_secreto_jwt_2026
 PORT=3000
-SMTP_HOST=$SMTP_HOST_VALUE
-SMTP_PORT=$SMTP_PORT_VALUE
-SMTP_SECURE=${SMTP_SECURE:-false}
-SMTP_USER=$SMTP_USER_VALUE
-SMTP_PASS=$SMTP_PASS_VALUE
-EMAIL_FROM=$EMAIL_FROM_VALUE
-ADMIN_EMAIL=$ADMIN_EMAIL_VALUE
-PAYMENT_INSTRUCTIONS=$PAYMENT_INSTRUCTIONS_VALUE
 EOF
-chmod 600 .env
-echo "Archivo .env creado. SMTP configurado: $([ -n "$SMTP_HOST_VALUE" ] && echo sí || echo no)"
 
 echo ""
 echo "=========================================================="
