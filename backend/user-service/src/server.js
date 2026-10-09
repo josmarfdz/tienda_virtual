@@ -50,6 +50,15 @@ const createPublicationController =
     require('./interfaces/publicationController');
 
 
+
+// ========================================
+// PEDIDOS Y CORREO (PUERTO + ADAPTADOR)
+// ========================================
+const OrderRepositoryAdapter = require('./infrastructure/orderRepositoryAdapter');
+const NodemailerAdapter = require('./infrastructure/nodemailerAdapter');
+const OrderService = require('./application/orderService');
+const createOrderController = require('./interfaces/orderController');
+
 // ========================================
 // EXPRESS
 // ========================================
@@ -99,6 +108,10 @@ const publicationService =
     );
 
 
+const orderRepository = new OrderRepositoryAdapter();
+const emailService = new NodemailerAdapter();
+const orderService = new OrderService(orderRepository, emailService);
+
 // ========================================
 // RUTA PRINCIPAL
 // ========================================
@@ -136,6 +149,8 @@ app.use(
     )
 );
 
+
+app.use('/', createOrderController(orderService));
 
 // ========================================
 // SERVIDOR

@@ -15,9 +15,10 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado
             )
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3, $4, $5, $6)
 
             RETURNING
                 id,
@@ -25,6 +26,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             `,
@@ -33,6 +35,7 @@ class PublicationRepositoryAdapter
                 publication.nombre,
                 publication.descripcion,
                 publication.imagen,
+                publication.precio,
                 publication.estado
             ]
         );
@@ -51,6 +54,7 @@ class PublicationRepositoryAdapter
                 p.nombre,
                 p.descripcion,
                 p.imagen,
+                p.precio,
                 p.estado,
                 p.fecha,
                 u.nombre AS vendedor
@@ -80,6 +84,7 @@ class PublicationRepositoryAdapter
                 p.nombre,
                 p.descripcion,
                 p.imagen,
+                p.precio,
                 p.estado,
                 p.fecha,
                 u.nombre AS vendedor,
@@ -107,6 +112,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             FROM publicaciones
@@ -131,6 +137,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             FROM publicaciones
@@ -169,10 +176,11 @@ class PublicationRepositoryAdapter
                 nombre = $1,
                 descripcion = $2,
                 imagen = $3,
+                precio = $4,
                 estado = 'pendiente'
 
-            WHERE id = $4
-              AND vendedor_id = $5
+            WHERE id = $5
+              AND vendedor_id = $6
 
             RETURNING
                 id,
@@ -180,6 +188,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             `,
@@ -187,6 +196,7 @@ class PublicationRepositoryAdapter
                 publication.nombre,
                 publication.descripcion,
                 publication.imagen,
+                publication.precio,
                 id,
                 vendedorId
             ]
@@ -240,6 +250,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             `,
@@ -284,6 +295,7 @@ class PublicationRepositoryAdapter
                 nombre,
                 descripcion,
                 imagen,
+                precio,
                 estado,
                 fecha
             `,

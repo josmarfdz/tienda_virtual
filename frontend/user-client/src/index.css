@@ -562,3 +562,39 @@ textarea:focus {
 
     border-radius: 6px;
 }
+/* ==============================
+   CARRITO Y CHECKOUT
+   ============================== */
+.cart-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) 110px auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+.cart-row p { margin: 5px 0 0; }
+.quantity-label { margin: 0; font-size: .9rem; }
+.quantity-label input { margin-top: 5px; }
+@media (max-width: 650px) {
+    .cart-row { grid-template-columns: 1fr 100px; }
+}
+
+
+/* Espaciado entre el catálogo y el carrito */
+.products-grid {
+    row-gap: 28px;
+    margin-bottom: 32px;
+}
+
+/* Separación adicional entre secciones consecutivas de la página de cliente */
+.products-grid {
+    padding-bottom: 4px;
+}
+
+@media (max-width: 650px) {
+    .products-grid {
+        row-gap: 22px;
+        margin-bottom: 26px;
+    }
+}

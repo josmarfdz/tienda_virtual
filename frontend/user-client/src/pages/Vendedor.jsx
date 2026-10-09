@@ -23,6 +23,8 @@ function Vendedor() {
     const [imagen, setImagen] =
         useState('');
 
+    const [precio, setPrecio] = useState('');
+
     const [
         publicacionEditando,
         setPublicacionEditando
@@ -64,6 +66,7 @@ function Vendedor() {
         setNombre('');
         setDescripcion('');
         setImagen('');
+        setPrecio('');
         setPublicacionEditando(null);
     };
 
@@ -82,7 +85,8 @@ function Vendedor() {
             const body = {
                 nombre,
                 descripcion,
-                imagen
+                imagen,
+                precio: Number(precio)
             };
 
             let data;
@@ -147,6 +151,7 @@ function Vendedor() {
         setImagen(
             publicacion.imagen || ''
         );
+        setPrecio(String(publicacion.precio ?? ''));
 
         window.scrollTo({
             top: 0,
@@ -286,6 +291,17 @@ function Vendedor() {
                         />
 
 
+                        <label>Precio (MXN)</label>
+                        <input
+                            type="number"
+                            min="0.01"
+                            step="0.01"
+                            value={precio}
+                            onChange={(e) => setPrecio(e.target.value)}
+                            placeholder="Ej. 249.99"
+                            required
+                        />
+
                         <label>
                             URL de la imagen
                         </label>
@@ -374,6 +390,7 @@ function Vendedor() {
                                             Descripción
                                         </th>
 
+                                        <th>Precio</th>
                                         <th>
                                             Estado
                                         </th>
@@ -407,6 +424,7 @@ function Vendedor() {
                                                     }
                                                 </td>
 
+                                                <td>${Number(publicacion.precio || 0).toFixed(2)} MXN</td>
                                                 <td>
                                                     <span
                                                         className={

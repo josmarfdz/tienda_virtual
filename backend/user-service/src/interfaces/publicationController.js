@@ -58,7 +58,8 @@ function createPublicationController(
                 const {
                     nombre,
                     descripcion,
-                    imagen
+                    imagen,
+                    precio
                 } = req.body;
 
                 const publicacion =
@@ -67,7 +68,8 @@ function createPublicationController(
                             req.user.id,
                             nombre,
                             descripcion,
-                            imagen
+                            imagen,
+                            precio
                         );
 
                 res.status(201).json({
@@ -136,7 +138,8 @@ function createPublicationController(
                 const {
                     nombre,
                     descripcion,
-                    imagen
+                    imagen,
+                    precio
                 } = req.body;
 
                 const publicacion =
@@ -146,7 +149,8 @@ function createPublicationController(
                             req.user.id,
                             nombre,
                             descripcion,
-                            imagen
+                            imagen,
+                            precio
                         );
 
                 res.json({

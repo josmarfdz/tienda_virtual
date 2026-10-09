@@ -163,19 +163,22 @@ class UserRepositoryAdapter extends UserRepositoryPort {
     // DELETE
     // =========================================
 
-    async delete(id) {
-
+async delete(id) {
+    try {
         const result = await db.query(
-            `
-            DELETE FROM usuarios
-            WHERE id = $1
-            RETURNING id
-            `,
-            [id]
+            `DELETE FROM usuarios WHERE id = $1 RETURNING id`, [id]
         );
-
         return result.rows.length > 0;
+    } catch (err) {
+        if (err.code === '23503') {
+            const error = new Error(
+                'No se puede eliminar: el usuario tiene pedidos asociados'
+            );
+            error.status = 409;
+            throw error;
+        }
+        throw err;
     }
 }
-
+}
 module.exports = UserRepositoryAdapter;

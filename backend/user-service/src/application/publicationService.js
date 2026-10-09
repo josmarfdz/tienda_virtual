@@ -13,12 +13,14 @@ class PublicationService {
         vendedorId,
         nombre,
         descripcion,
-        imagen
+        imagen,
+        precio
     ) {
         if (
             !vendedorId ||
             !nombre ||
-            !descripcion
+            !descripcion ||
+            !Number.isFinite(Number(precio)) || Number(precio) <= 0
         ) {
             const error =
                 new Error('Faltan datos');
@@ -34,6 +36,7 @@ class PublicationService {
                 nombre,
                 descripcion,
                 imagen || null,
+                Number(precio),
                 'pendiente'
             );
 
@@ -81,13 +84,15 @@ class PublicationService {
         vendedorId,
         nombre,
         descripcion,
-        imagen
+        imagen,
+        precio
     ) {
         if (
             !id ||
             !vendedorId ||
             !nombre ||
-            !descripcion
+            !descripcion ||
+            !Number.isFinite(Number(precio)) || Number(precio) <= 0
         ) {
             const error =
                 new Error('Faltan datos');
@@ -99,7 +104,8 @@ class PublicationService {
         const publication = {
             nombre,
             descripcion,
-            imagen: imagen || null
+            imagen: imagen || null,
+            precio: Number(precio)
         };
 
         const updated =
