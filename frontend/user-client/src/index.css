@@ -598,3 +598,258 @@ textarea:focus {
         margin-bottom: 26px;
     }
 }
+
+
+/* ==============================
+   DASHBOARD DE VENTAS
+   ============================== */
+
+.dashboard-titulo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.btn:hover {
+    text-decoration: none;
+}
+
+select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    background: white;
+}
+
+.filtros {
+    padding: 18px 25px;
+}
+
+.filtros-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.chip {
+    padding: 8px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+}
+
+.chip:hover {
+    border-color: #2563eb;
+}
+
+.chip:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.chip-activo {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}
+
+.filtros-selects {
+    display: flex;
+    gap: 12px;
+}
+
+.filtros-selects label,
+.filtros-personalizado label {
+    margin-top: 0;
+    font-size: 0.85rem;
+    color: #4b5563;
+}
+
+.filtros-selects select {
+    margin-top: 4px;
+    min-width: 140px;
+}
+
+.filtros-personalizado {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.filtros-personalizado input {
+    margin-top: 4px;
+}
+
+.filtros-error {
+    flex-basis: 100%;
+    margin: 0;
+    color: #991b1b;
+    font-size: 0.9rem;
+}
+
+.dashboard-contenido {
+    transition: opacity 0.2s;
+}
+
+.dashboard-contenido.actualizando {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.kpi {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid #2563eb;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.06);
+}
+
+.kpi-titulo {
+    color: #6b7280;
+    font-size: 0.85rem;
+}
+
+.kpi-valor {
+    font-size: 1.55rem;
+}
+
+.kpi-detalle {
+    color: #6b7280;
+    font-size: 0.8rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.card-cabecera {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.card-cabecera h2 {
+    margin: 0 0 15px;
+}
+
+.grafico {
+    width: 100%;
+}
+
+.leyenda {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+}
+
+.leyenda li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.leyenda-punto {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.leyenda-nombre {
+    flex: 1;
+}
+
+.leyenda-valor {
+    color: #4b5563;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.barra-unidades {
+    position: relative;
+    min-width: 140px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    background: #f3f4f6;
+    overflow: hidden;
+}
+
+.barra-unidades-relleno {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: #bfdbfe;
+}
+
+.barra-unidades span {
+    position: relative;
+    font-weight: 600;
+}
+
+@media (max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ==============================
+   PEDIDOS: ESTADO "ENVIADO" Y FILTRO
+   ============================== */
+
+.status.shipped {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.filtro-pedidos {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 15px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.filtro-pedidos select {
+    width: auto;
+    min-width: 190px;
+}

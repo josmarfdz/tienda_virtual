@@ -42,6 +42,54 @@ function createOrderController(orderService) {
         }
     });
 
+    // El cliente cancela su propio pedido (solo si todavía no se envió).
+    router.patch('/pedidos/:id/cancelar', authMiddleware, requireRole('cliente'), async (req, res) => {
+        try {
+            const order = await orderService.cancelByCustomer(req.params.id, req.user.id);
+            res.json({ msg: 'Pedido cancelado correctamente', pedido: order });
+        } catch (error) {
+            responderError(res, error, 'Error al cancelar el pedido');
+        }
+    });
+
+    // ---------- Administración de pedidos (solo admin) ----------
+
+    router.get('/admin/pedidos', authMiddleware, requireRole('admin'), async (req, res) => {
+        try {
+            res.json(await orderService.listAll(req.query.estado));
+        } catch (error) {
+            responderError(res, error, 'Error al consultar los pedidos');
+        }
+    });
+
+    router.patch('/admin/pedidos/:id/enviar', authMiddleware, requireRole('admin'), async (req, res) => {
+        try {
+            const order = await orderService.confirmShipment(req.params.id);
+            res.json({ msg: `Envío del pedido #${order.id} confirmado`, pedido: order });
+        } catch (error) {
+            responderError(res, error, 'Error al confirmar el envío');
+        }
+    });
+
+    router.patch('/admin/pedidos/:id/cancelar', authMiddleware, requireRole('admin'), async (req, res) => {
+        try {
+            const order = await orderService.cancelByAdmin(req.params.id);
+            res.json({ msg: `Pedido #${order.id} cancelado`, pedido: order });
+        } catch (error) {
+            responderError(res, error, 'Error al cancelar el pedido');
+        }
+    });
+
     return router;
 }
+
+// Errores esperados (400/404/409) se muestran tal cual; los inesperados
+// no exponen detalles internos de la base de datos.
+function responderError(res, error, mensajeGenerico) {
+    console.error(mensajeGenerico + ':', error.message);
+    res.status(error.status || 500).json({
+        msg: error.status ? error.message : mensajeGenerico
+    });
+}
+
 module.exports = createOrderController;

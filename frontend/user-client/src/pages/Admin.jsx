@@ -3,7 +3,10 @@ import {
     useState
 } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import Navbar from '../components/Navbar';
+import PedidosAdmin from '../components/PedidosAdmin';
 import { apiFetch } from '../services/api';
 
 function Admin() {
@@ -333,6 +336,13 @@ function Admin() {
                         solicitudes y publicaciones
                         de E-Tienda.
                     </p>
+
+                    <Link
+                        to="/admin/dashboard"
+                        className="btn btn-primary"
+                    >
+                        Ver dashboard de ventas
+                    </Link>
                 </section>
 
 
@@ -347,6 +357,13 @@ function Admin() {
                         {error}
                     </div>
                 )}
+
+
+                {/* =========================
+                    PEDIDOS (envío / cancelación)
+                   ========================= */}
+
+                <PedidosAdmin />
 
 
                 {/* =========================

@@ -40,6 +40,10 @@ echo "=== Aplicando migración de pedidos/precios ==="
 MIGRATION_PATH="$SCRIPT_DIR/../database/migration_pedidos.sql"
 sudo -u postgres psql -v ON_ERROR_STOP=1 -d api_usuarios -f "$MIGRATION_PATH"
 
+echo "=== Aplicando migración del dashboard de ventas (estados + índices) ==="
+ANALYTICS_PATH="$SCRIPT_DIR/../database/migration_analytics.sql"
+sudo -u postgres psql -v ON_ERROR_STOP=1 -d api_usuarios -f "$ANALYTICS_PATH"
+
 echo ""
 echo "=========================================================="
 echo "Base de datos configurada con éxito."

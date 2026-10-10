@@ -60,6 +60,13 @@ const OrderService = require('./application/orderService');
 const createOrderController = require('./interfaces/orderController');
 
 // ========================================
+// ANALÍTICA (DASHBOARD DE VENTAS)
+// ========================================
+const AnalyticsRepositoryAdapter = require('./infrastructure/analyticsRepositoryAdapter');
+const AnalyticsService = require('./application/analyticsService');
+const createAnalyticsController = require('./interfaces/analyticsController');
+
+// ========================================
 // EXPRESS
 // ========================================
 
@@ -112,6 +119,12 @@ const orderRepository = new OrderRepositoryAdapter();
 const emailService = new NodemailerAdapter();
 const orderService = new OrderService(orderRepository, emailService);
 
+const analyticsRepository = new AnalyticsRepositoryAdapter();
+const analyticsService = new AnalyticsService(analyticsRepository, {
+    // Zona horaria con la que se agrupan los días (configurable en .env)
+    zonaHoraria: process.env.ANALYTICS_TZ || 'America/Mexico_City'
+});
+
 // ========================================
 // RUTA PRINCIPAL
 // ========================================
@@ -151,6 +164,8 @@ app.use(
 
 
 app.use('/', createOrderController(orderService));
+
+app.use('/', createAnalyticsController(analyticsService));
 
 // ========================================
 // SERVIDOR

@@ -5,6 +5,7 @@ import {
 
 import Navbar from '../components/Navbar';
 import { apiFetch } from '../services/api';
+import { claseEstado, etiquetaEstado, puedeCancelarse } from '../utils/pedidos';
 
 function Cliente() {
     const usuario = JSON.parse(
@@ -119,6 +120,27 @@ function Cliente() {
         } catch (err) {
             setCheckoutError(err.message);
         } finally {
+            setCargando(false);
+        }
+    };
+
+    const cancelarPedido = async (pedidoId) => {
+        if (!window.confirm(`¿Seguro que deseas cancelar el pedido #${pedidoId}? Esta acción no se puede deshacer.`)) {
+            return;
+        }
+        setCheckoutMsg('');
+        setCheckoutError('');
+        try {
+            setCargando(true);
+            const data = await apiFetch(`/pedidos/${pedidoId}/cancelar`, {
+                method: 'PATCH'
+            });
+            setCheckoutMsg(data.msg);
+        } catch (err) {
+            setCheckoutError(err.message);
+        } finally {
+            // Se recarga siempre: si el admin ya envió el pedido, la tabla lo refleja.
+            await cargarPedidos();
             setCargando(false);
         }
     };
@@ -330,20 +352,31 @@ function Cliente() {
                                             <td>#{pedido.id}</td>
                                             <td>{new Date(pedido.fecha).toLocaleString('es-MX')}</td>
                                             <td>${Number(pedido.total).toFixed(2)} MXN</td>
-                                            <td>{pedido.estado === 'pagado' ? 'Pagado' : 'Pendiente de pago'}</td>
-                                            <td>{pedido.estado === 'pendiente_pago' ? (
-                                                <button className="btn btn-success btn-small" disabled={cargando}
-                                                    onClick={() => confirmarPago(pedido.id)}>
-                                                    Confirmar pago realizado
-                                                </button>
-                                            ) : '—'}</td>
+                                            <td><span className={claseEstado(pedido.estado)}>{etiquetaEstado(pedido.estado)}</span></td>
+                                            <td>
+                                                <div className="actions">
+                                                    {pedido.estado === 'pendiente_pago' && (
+                                                        <button className="btn btn-success btn-small" disabled={cargando}
+                                                            onClick={() => confirmarPago(pedido.id)}>
+                                                            Confirmar pago realizado
+                                                        </button>
+                                                    )}
+                                                    {puedeCancelarse(pedido.estado) && (
+                                                        <button className="btn btn-danger btn-small" disabled={cargando}
+                                                            onClick={() => cancelarPedido(pedido.id)}>
+                                                            Cancelar pedido
+                                                        </button>
+                                                    )}
+                                                    {!puedeCancelarse(pedido.estado) && '—'}
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
                     )}
-                    <p className="muted">Esta confirmación es una simulación académica; no verifica movimientos bancarios reales.</p>
+                    <p className="muted">Esta confirmación es una simulación académica; no verifica movimientos bancarios reales. Puedes cancelar un pedido mientras no haya sido enviado.</p>
                 </section>
 
             </main>

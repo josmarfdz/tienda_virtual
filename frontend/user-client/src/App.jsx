@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import Cliente from './pages/Cliente';
 import Vendedor from './pages/Vendedor';
 import Admin from './pages/Admin';
+import Dashboard from './pages/Dashboard';
 
 import ProtectedRoute
     from './components/ProtectedRoute';
@@ -57,6 +58,17 @@ function App() {
                             roles={['admin']}
                         >
                             <Admin />
+                        </ProtectedRoute>
+                    }
+                />
+
+                <Route
+                    path="/admin/dashboard"
+                    element={
+                        <ProtectedRoute
+                            roles={['admin']}
+                        >
+                            <Dashboard />
                         </ProtectedRoute>
                     }
                 />

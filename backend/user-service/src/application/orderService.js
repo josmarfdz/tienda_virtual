@@ -34,6 +34,15 @@ class OrderService {
             error.status = 409;
             throw error;
         }
+        if (current.estado !== 'pendiente_pago') {
+            const error = new Error(
+                current.estado === 'cancelado'
+                    ? 'Este pedido fue cancelado y ya no puede pagarse'
+                    : 'Este pedido ya no admite pagos'
+            );
+            error.status = 409;
+            throw error;
+        }
         const order = await this.orderRepository.markPaid(orderId, customerId);
         if (!order) {
             const error = new Error('No fue posible actualizar el estado del pedido');
@@ -54,5 +63,84 @@ class OrderService {
     async listMine(customerId) {
         return this.orderRepository.listByCustomer(customerId);
     }
+
+    // =========================================
+    // ADMINISTRACIÓN: listado, envío y cancelación
+    // =========================================
+
+    async listAll(estado) {
+        if (estado && !ESTADOS_VALIDOS.includes(estado)) {
+            throw crearError('Estado de pedido no válido', 400);
+        }
+        return this.orderRepository.listAll({ estado: estado || null });
+    }
+
+    // Solo se puede enviar un pedido que ya está pagado.
+    async confirmShipment(orderId) {
+        return this._cambiarEstado(orderId, {
+            from: ['pagado'],
+            to: 'enviado'
+        });
+    }
+
+    // El administrador puede cancelar mientras no se haya enviado.
+    async cancelByAdmin(orderId) {
+        return this._cambiarEstado(orderId, {
+            from: ESTADOS_CANCELABLES,
+            to: 'cancelado'
+        });
+    }
+
+    // El cliente puede cancelar sus propios pedidos mientras no se hayan enviado.
+    async cancelByCustomer(orderId, customerId) {
+        return this._cambiarEstado(orderId, {
+            from: ESTADOS_CANCELABLES,
+            to: 'cancelado',
+            customerId
+        });
+    }
+
+    async _cambiarEstado(orderId, { from, to, customerId = null }) {
+        const id = Number(orderId);
+
+        if (!Number.isSafeInteger(id) || id < 1) {
+            throw crearError('Identificador de pedido no válido', 400);
+        }
+
+        const cambiado = await this.orderRepository.transition(id, { from, to, customerId });
+
+        const actual = await this.orderRepository.findById(id);
+
+        if (cambiado) {
+            return actual;
+        }
+
+        // No se pudo cambiar: ¿no existe / no es suyo, o está en un estado que no lo permite?
+        // (Para un cliente, el pedido ajeno se reporta como "no encontrado".)
+        if (!actual || (customerId !== null && actual.cliente_id !== customerId)) {
+            throw crearError('Pedido no encontrado', 404);
+        }
+
+        throw crearError(mensajeConflicto(actual.estado, to), 409);
+    }
+}
+
+const ESTADOS_VALIDOS = ['pendiente_pago', 'pagado', 'enviado', 'cancelado'];
+const ESTADOS_CANCELABLES = ['pendiente_pago', 'pagado'];
+
+function crearError(mensaje, status) {
+    const error = new Error(mensaje);
+    error.status = status;
+    return error;
+}
+
+function mensajeConflicto(estadoActual, destino) {
+    if (destino === 'enviado') {
+        if (estadoActual === 'pendiente_pago') return 'El pedido aún no está pagado; no se puede enviar';
+        if (estadoActual === 'enviado') return 'El pedido ya fue marcado como enviado';
+        return 'El pedido está cancelado; no se puede enviar';
+    }
+    if (estadoActual === 'enviado') return 'El pedido ya fue enviado y no puede cancelarse';
+    return 'El pedido ya estaba cancelado';
 }
 module.exports = OrderService;
